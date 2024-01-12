@@ -60,6 +60,19 @@ ontology:
       - mods.hasPart:
           cardinality: 1
           range: mods.OutputData
+      - mods.hasPart:
+          cardinality: some
+          range: mods.ModelInput
+  
+  SampleSRM:
+    subclass_of:
+      - mods.Simulation
+      - mods.hasPart:
+          cardinality: 1
+          range: mods.OutputData
+      - mods.hasPart:
+          cardinality: 1
+          range: mods.File
 
   SensitivityAnalysis:
     subclass_of:
@@ -80,6 +93,7 @@ ontology:
       mods.maxNumberOfResults: None
       mods.saveSurrogate: None
       mods.surrogateToLoad: None
+      mods.modelToLoad: None
 
   InputData:
     subclass_of:
@@ -95,6 +109,21 @@ ontology:
   OutputData:
     subclass_of:
       - mods.DataSet
+  
+  ModelInput:
+    subclass_of:
+      - cuba.Entity
+      - mods.hasPart:
+          cardinality: 1
+          range: mods.DataSet
+    attributes:
+      mods.path:
+  
+  File:
+    subclass_of:
+      - cuba.Entity
+    attributes:
+      mods.file:
 
   ParetoFront:
     subclass_of:
@@ -169,10 +198,35 @@ ontology:
     attributes:
       mods.name:
       mods.type:
+      mods.path: None
       mods.objective: None
       mods.minimum: None
       mods.maximum: None
       mods.weight: None
+      mods.nParams: None
+
+  InitialReadDetail:
+    subclass_of:
+      - cuba.Entity
+    attributes:
+      mods.file:
+      mods.x_column:
+      mods.y_column:
+      mods.x_value:
+      mods.read_function:
+      mods.lb_factor:
+      mods.ub_factor:
+      mods.lb_append:
+      mods.ub_append:
+  
+  WorkingReadDetail:
+    subclass_of:
+      - cuba.Entity
+    attributes:
+      mods.x_column:
+      mods.y_column:
+      mods.x_value:
+      mods.read_function:
 
   formula:
     subclass_of:
@@ -192,8 +246,18 @@ ontology:
     subclass_of:
       - cuba.attribute
     datatype: STRING
+  
+  file:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
 
   type:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  path:
     subclass_of:
       - cuba.attribute
     datatype: STRING
@@ -204,6 +268,11 @@ ontology:
     datatype: BOOL
 
   surrogateToLoad:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  modelToLoad:
     subclass_of:
       - cuba.attribute
     datatype: STRING
@@ -227,8 +296,53 @@ ontology:
     subclass_of:
       - cuba.attribute
     datatype: STRING
+  
+  nParams:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
 
   maxNumberOfResults:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+
+  x_column:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  y_column:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  x_value:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  read_function:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  lb_factor:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+
+  ub_factor:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+  
+  lb_append:
+    subclass_of:
+      - cuba.attribute
+    datatype: STRING
+
+  ub_append:
     subclass_of:
       - cuba.attribute
     datatype: STRING

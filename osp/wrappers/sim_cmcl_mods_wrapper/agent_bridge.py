@@ -45,7 +45,7 @@ class Agent_Bridge:
             Resulting JSON data objects (or None if error occurs)
         """
         os.environ['NO_PROXY'] = self.base_url
-        logger.info(f"MoDS enpoint: {os.environ['MODS_AGENT_BASE_URL']}")
+        logger.info(f"MoDS endpoint: {os.environ['MODS_AGENT_BASE_URL']}")
         
         logger.info("Submitting job")
         submit_message = self.submitJob(jsonString)
@@ -90,7 +90,13 @@ class Agent_Bridge:
         url = self.buildSubmissionURL(jsonString)
 
         # Submit the request and get the response
-        response = requests.get(url)
+        if len(url)<0:
+            response = requests.get(url)
+        else:
+            with open('tmp.json','w') as f:
+                f.write(json.dumps(json.loads(jsonString),indent=2))
+            with open('tmp.json','rb') as f:
+                response = requests.post(self.base_url+"filerequest",files={"file":f})
 
         # Check the HTTP return code
         if(response.status_code != 200):
