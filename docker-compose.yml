@@ -12,3 +12,5 @@ services:
     container_name: sim_cmcl_mods_wrapper
     ports:
       - 5001:5000
+    volumes:
+      - ./examples:/simphony/mods-wrapper/examples/
