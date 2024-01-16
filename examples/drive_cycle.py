@@ -1,6 +1,6 @@
 import logging
 from osp.core.namespaces import mods, cuba
-from osp.core.utils import pretty_print
+from osp.core.utils import pretty_print, export_cuds, import_cuds
 import osp.core.utils.simple_search as search
 import osp.wrappers.sim_cmcl_mods_wrapper.mods_session as ms
 from dotenv import load_dotenv
@@ -183,6 +183,12 @@ def outputtodict(output_data):
 
     return output
 
+def createtimefrominput(input_cuds_object):
+    input_data = search.find_cuds_objects_by_oclass(mods.InputData, input_cuds_object, rel=None)
+    datapoints = search.find_cuds_objects_by_oclass(mods.DataPoint, input_data[0], rel=mods.hasPart)
+    drive_cycle=getdrivecycle(len(datapoints))
+    return drive_cycle["Time [s]"]
+
 if __name__ == "__main__":
 
     logger = logging.getLogger(__name__)
@@ -192,29 +198,41 @@ if __name__ == "__main__":
     logger.info("Loading environment variables")
     load_dotenv()
 
-    engine_inputs=[{"name":"Engine%20speed%20%5BRPM%5D"},{"name":"BMEP%20%5Bbar%5D"}]
-    engine_outputs=[{"name":"CO%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"CO2%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"C3H6%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"H2%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"H2O%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"NO%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"O2%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"N2%20mass%20fraction%20%5B%2D%5D"},
-                    {"name":"Temperature%20%5BK%5D"},
-                    {"name":"Total%20flow%20%5Bg%2Fh%5D"}
-                    ]
-    
-    drive_cycle=getdrivecycle(181) # number of points will affect runtime
+    try:
+        input_cuds_object=import_cuds("examples/input_cuds_object.ttl", format="ttl")
+        # create drive cycle time, assuming engine sampling points are evenly spaced in time from 0 to 1800 seconds
+        drive_cycle_time=createtimefrominput(input_cuds_object)
+    except:
+        # create input CUDS object by code
 
-    for input in engine_inputs:
-        input["values"]=drive_cycle[urllib.parse.unquote(input["name"])]
+        engine_inputs=[{"name":"Engine%20speed%20%5BRPM%5D"},{"name":"BMEP%20%5Bbar%5D"}]
+        engine_outputs=[{"name":"CO%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"CO2%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"C3H6%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"H2%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"H2O%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"NO%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"O2%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"N2%20mass%20fraction%20%5B%2D%5D"},
+                        {"name":"Temperature%20%5BK%5D"},
+                        {"name":"Total%20flow%20%5Bg%2Fh%5D"}
+                        ]
+        
+        drive_cycle=getdrivecycle(181) # number of points will affect runtime
+        drive_cycle_time=drive_cycle["Time [s]"]
 
-    engine_out=outputtodict(run(logger,prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs)))
+        for input in engine_inputs:
+            input["values"]=drive_cycle[urllib.parse.unquote(input["name"])]
+        
+        input_cuds_object=prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs)
+
+        export_cuds(input_cuds_object,file="examples/input_cuds_object.ttl", format="ttl")        
+
+    engine_out=outputtodict(run(logger,input_cuds_object))
 
     twc_thermal_out=outputtodict(
         run(logger,prepare_twc_thermal(logger,"twc-thermal",
-                                     drive_cycle["Time [s]"],engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
+                                     drive_cycle_time,engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
     
     print([key for key in engine_out.keys()])
     twc_inputs=[{"name":"Temperature%20%5BK%5D"},
@@ -243,8 +261,8 @@ if __name__ == "__main__":
             input["values"]=twc_thermal_out["WallTemperature (Layer 1, Vol. element 30)"]
             print(input["name"])
     
-    twc_out=outputtodict(run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs)))
+    output_cuds_object=run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs))
 
-    for key in twc_out.keys():
-        print(key)
-        print(twc_out[key])
+    # export
+
+    export_cuds(output_cuds_object,file="examples/output_cuds_object.ttl", format="ttl")
