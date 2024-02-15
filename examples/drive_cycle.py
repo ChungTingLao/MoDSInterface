@@ -189,20 +189,10 @@ def createtimefrominput(input_cuds_object):
     drive_cycle=getdrivecycle(len(datapoints))
     return drive_cycle["Time [s]"]
 
-if __name__ == "__main__":
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.StreamHandler())
-    logger.handlers[0].setFormatter(logging.Formatter("%(levelname)s %(asctime)s [%(name)s]: %(message)s"))
-    logger.info("Loading environment variables")
-    load_dotenv()
-
+def create_input_cuds():
     try:
         input_cuds_object=import_cuds("examples/input_cuds_object.ttl", format="ttl")
-        # create drive cycle time, assuming engine sampling points are evenly spaced in time from 0 to 1800 seconds
-        drive_cycle_time=createtimefrominput(input_cuds_object)
-    except:
+    except ValueError:
         # create input CUDS object by code
 
         engine_inputs=[{"name":"Engine%20speed%20%5BRPM%5D"},{"name":"BMEP%20%5Bbar%5D"}]
@@ -218,23 +208,32 @@ if __name__ == "__main__":
                         {"name":"Total%20flow%20%5Bg%2Fh%5D"}
                         ]
         
-        drive_cycle=getdrivecycle(181) # number of points will affect runtime
-        drive_cycle_time=drive_cycle["Time [s]"]
+        drive_cycle=getdrivecycle(2) # number of points will affect runtime
 
         for input in engine_inputs:
             input["values"]=drive_cycle[urllib.parse.unquote(input["name"])]
         
         input_cuds_object=prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs)
+    return input_cuds_object
 
-        export_cuds(input_cuds_object,file="examples/input_cuds_object.ttl", format="ttl")        
+def mods_wrapper(input_cuds_object):
+    
+    # create drive cycle time, assuming engine sampling points are evenly spaced in time from 0 to 1800 seconds
+    # to-do: time should be included in the input cuds object
+    drive_cycle_time=createtimefrominput(input_cuds_object)
+    
+    # evaluate engine surrogate, store output cuds in dictionary
 
     engine_out=outputtodict(run(logger,input_cuds_object))
+
+    # evaluate TWC thermal simulation, store output cuds in dictionary
 
     twc_thermal_out=outputtodict(
         run(logger,prepare_twc_thermal(logger,"twc-thermal",
                                      drive_cycle_time,engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
     
-    print([key for key in engine_out.keys()])
+    # create input for TWC surrogate
+    
     twc_inputs=[{"name":"Temperature%20%5BK%5D"},
                 {"name":"Total%20flow%20%5Bg%2Fh%5D"},
                 {"name":"Inlet%20CO%20mass%20fraction%20%5B%2D%5D"},
@@ -256,13 +255,26 @@ if __name__ == "__main__":
 
     for input in twc_inputs:
         input["values"]=engine_out[urllib.parse.unquote(input["name"]).replace("Inlet ","")]
-        print(urllib.parse.unquote(input["name"].replace("Inlet ","")))
         if "Temperature" in input["name"]:
             input["values"]=twc_thermal_out["WallTemperature (Layer 1, Vol. element 30)"]
-            print(input["name"])
+
+    # evaluate TWC surrogate
     
-    output_cuds_object=run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs))
+    return run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs))
 
-    # export
+if __name__ == "__main__":
 
-    export_cuds(output_cuds_object,file="examples/output_cuds_object.ttl", format="ttl")
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.ERROR)
+    logger.addHandler(logging.StreamHandler())
+    logger.handlers[0].setFormatter(logging.Formatter("%(levelname)s %(asctime)s [%(name)s]: %(message)s"))
+    logger.info("Loading environment variables")
+    load_dotenv()
+
+    input_cuds_object=create_input_cuds()
+
+    output_cuds_object=mods_wrapper(input_cuds_object)
+
+    export_cuds(input_cuds_object,file="examples/input_cuds_object", format="xml")
+
+    export_cuds(output_cuds_object,file="examples/output_cuds_object", format="xml")
