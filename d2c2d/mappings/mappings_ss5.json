@@ -1,0 +1,35 @@
+{
+    "70cb798f-5648-4f21-9a48-db651e4bb6f1": {
+        "meta": "http://onto-ns.com/meta/0.1/Collection",
+        "dimensions": {
+            "nrelations": 23
+        },
+        "properties": {
+            "relations": [
+			    ["http://onto-ns.com/meta/0.1/DataPointItem", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#DataPointItem"],
+                ["http://onto-ns.com/meta/0.1/DataPointItem#name", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#name"],
+                ["http://onto-ns.com/meta/0.1/DataPointItem#value", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#value"],
+				["http://onto-ns.com/meta/0.1/DataPoint", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#DataPoint"],
+				["http://onto-ns.com/meta/0.1/OutputData", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#OutputData"],
+				["http://onto-ns.com/meta/0.1/Algorithm", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#Algorithm"],
+				["http://onto-ns.com/meta/0.1/Algorithm#maxNumberOfResults", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#maxNumberOfResults"],
+				["http://onto-ns.com/meta/0.1/Algorithm#modelToLoad", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#modelToLoad"],
+				["http://onto-ns.com/meta/0.1/Algorithm#name", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#name"],
+				["http://onto-ns.com/meta/0.1/Algorithm#saveSurrogate", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#saveSurrogate"],
+				["http://onto-ns.com/meta/0.1/Algorithm#surrogateToLoad", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#surrogateToLoad"],
+				["http://onto-ns.com/meta/0.1/Algorithm#type", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#type"],
+				["http://onto-ns.com/meta/0.1/InputData", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#InputData"],
+				["http://onto-ns.com/meta/0.1/Variable", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#Variable"],
+				["http://onto-ns.com/meta/0.1/Variable#maximum", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#maximum"],
+				["http://onto-ns.com/meta/0.1/Variable#minimum", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#minimum"],
+				["http://onto-ns.com/meta/0.1/Variable#nParams", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#nParams"],
+				["http://onto-ns.com/meta/0.1/Variable#name", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#name"],
+				["http://onto-ns.com/meta/0.1/Variable#objective", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#objective"],
+				["http://onto-ns.com/meta/0.1/Variable#path", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#path"],
+				["http://onto-ns.com/meta/0.1/Variable#type", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#type"],
+				["http://onto-ns.com/meta/0.1/Variable#weight", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#weight"],
+				["http://onto-ns.com/meta/0.1/EvaluateSurrogate", "http://emmo.info/domain-mappings#mapsTo", "http://www.osp-core.com/mods#EvaluateSurrogate"]
+            ]
+        }
+    }
+}

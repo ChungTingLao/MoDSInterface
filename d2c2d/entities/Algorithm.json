@@ -1,0 +1,31 @@
+{
+  "uri": "http://onto-ns.com/meta/0.1/Algorithm",
+  "description": "",
+  "dimensions": {},
+  "properties": {
+    "maxNumberOfResults": {
+      "type": "string",
+      "description": ""
+    },
+	"modelToLoad": {
+      "type": "string",
+      "description": ""
+    },
+	"name": {
+      "type": "string",
+      "description": ""
+    },
+	"saveSurrogate": {
+      "type": "bool",
+      "description": ""
+    },
+	"surrogateToLoad": {
+      "type": "string",
+      "description": ""
+    },
+	"type": {
+      "type": "string",
+      "description": ""
+    }
+  }
+}
