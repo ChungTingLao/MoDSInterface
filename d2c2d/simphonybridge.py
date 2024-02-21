@@ -1,45 +1,40 @@
-import os
-from pathlib import Path
-
 def downgrade(new_cuds,old_cuds):
-    cwd = Path(__file__).parent.resolve()
 
-    with open(os.path.join(cwd,new_cuds),'r') as f:
+    with open(new_cuds,'r') as f:
         content=f.readlines()
 
     new_content=['@prefix cuba: <http://www.osp-core.com/cuba#> .\n','@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n']
 
-    # change namespace and add float specification
+    # change namespace
 
     for line in content:
         tmp_line=line.replace('https://www.simphony-osp.eu/entity','http://www.osp-core.com/cuds')
         new_content.append(tmp_line)
-        # hack
+        # EvaluateSurrogate is the highest-level object
         if "EvaluateSurrogate" in tmp_line:
             first=tmp_line.split('#')[1].split('>')[0]
     
     new_content.append('cuba:_serialization rdf:first "'+first+'" .')
 
-    with open(os.path.join(cwd,old_cuds),'w') as f:
+    with open(old_cuds,'w') as f:
         f.writelines(new_content)
 
 def upgrade(old_cuds,new_cuds):
-    cwd = Path(__file__).parent.resolve()
 
-    with open(os.path.join(cwd,old_cuds),'r') as f:
+    with open(old_cuds,'r') as f:
         content=f.readlines()
 
     new_content=[]
 
-    # change namespace and add float specification
-
+    # change namespace
+    
     for line in content:
         tmp_line=line.replace('http://www.osp-core.com/cuds','https://www.simphony-osp.eu/entity')
         if 'mods:value' in tmp_line:
-            tmp_line=tmp_line.replace('" .','"^^xsd:float .')
+            tmp_line=tmp_line.replace('" .','"^^xsd:float .') # add float specification
         new_content.append(tmp_line)
         
-    # hack to remove EvaluateSurrogate reference in OutputData
+    # remove EvaluateSurrogate reference in OutputData
 
     for i in range(len(new_content)):
         if 'mods:OutputData' in new_content[i]:
@@ -52,5 +47,5 @@ def upgrade(old_cuds,new_cuds):
                     break
             if stop_now: break
     
-    with open(os.path.join(cwd,new_cuds),'w') as f:
+    with open(new_cuds,'w') as f:
         f.writelines(new_content)
