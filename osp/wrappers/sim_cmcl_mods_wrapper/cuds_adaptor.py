@@ -374,8 +374,6 @@ class CUDS_Adaptor:
             output_data = mods.OutputData()
             simulation = root_cuds_object.get(
                 oclass=mods.SampleSRM, rel=cuba.relationship)[0]
-            
-            json.dump(jsonResults, open("out.json","w"),indent=2)
 
             num_values = len(jsonResults[OUTPUTS_KEY][0]["values"])
             for i in range(num_values):

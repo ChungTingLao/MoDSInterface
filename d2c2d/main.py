@@ -47,5 +47,5 @@ sb.upgrade(cwd/"output_cuds_3.8.ttl",cwd/"output_cuds_4.ttl")
 
 dcb.c2d(output_cuds_internal=cwd/"output_cuds_4.ttl",output_dlite=os.path.join(cwd,"output_collection.json"))
 
-for file in ['tmp.json','out.json',cwd/"input_cuds_3.8.ttl",cwd/"input_cuds_4.ttl",cwd/"output_cuds_3.8.ttl",cwd/"output_cuds_4.ttl"]:
+for file in [cwd/"input_cuds_3.8.ttl",cwd/"input_cuds_4.ttl",cwd/"output_cuds_3.8.ttl",cwd/"output_cuds_4.ttl"]:
     if True: os.remove(file) # remove intermediate files

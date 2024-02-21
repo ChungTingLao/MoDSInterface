@@ -5,6 +5,7 @@ import time
 from typing import Optional, Dict
 import logging
 import os
+import io
 
 logger = logging.getLogger(__name__)
 
@@ -93,10 +94,8 @@ class Agent_Bridge:
         if len(url)<0:
             response = requests.get(url)
         else:
-            with open('tmp.json','w') as f:
-                f.write(json.dumps(json.loads(jsonString),indent=2))
-            with open('tmp.json','rb') as f:
-                response = requests.post(self.base_url+"filerequest",files={"file":f})
+            my_file = io.BytesIO(json.dumps(json.loads(jsonString),indent=2).encode())
+            response = requests.post(self.base_url+"filerequest",files={"file":my_file})
 
         # Check the HTTP return code
         if(response.status_code != 200):
