@@ -1,0 +1,5 @@
+identifier: cuba
+ontology_file: cuba.ttl
+format: 'turtle'
+namespaces:
+    cuba: http://www.osp-core.com/cuba#

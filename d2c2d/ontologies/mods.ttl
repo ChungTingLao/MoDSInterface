@@ -1,0 +1,393 @@
+@prefix ns1: <http://www.osp-core.com/cuba#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.osp-core.com/mods#> ns1:_default_rel <http://www.osp-core.com/mods#hasPart> .
+
+<http://www.osp-core.com/mods#Algorithm> a owl:Class ;
+    ns1:_default [ ns1:_default_attribute <http://www.osp-core.com/mods#maxNumberOfResults> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#modelToLoad> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#surrogateToLoad> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#saveSurrogate> ;
+            ns1:_default_value "None" ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#name> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#modelToLoad> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#surrogateToLoad> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#saveSurrogate> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#type> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#maxNumberOfResults> ],
+        ns1:Entity ;
+    skos:prefLabel "Algorithm"@en .
+
+<http://www.osp-core.com/mods#AnalyticModel> a owl:Class ;
+    rdfs:subClassOf ns1:Entity ;
+    skos:prefLabel "AnalyticModel"@en .
+
+<http://www.osp-core.com/mods#DataPoint> a owl:Class ;
+    rdfs:subClassOf ns1:Entity ;
+    skos:prefLabel "DataPoint"@en .
+
+<http://www.osp-core.com/mods#EvaluateSurrogate> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#Simulation> ;
+    skos:prefLabel "EvaluateSurrogate"@en .
+
+<http://www.osp-core.com/mods#File> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#file> ],
+        ns1:Entity ;
+    skos:prefLabel "File"@en .
+
+<http://www.osp-core.com/mods#Function> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#name> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#formula> ],
+        ns1:Entity ;
+    skos:prefLabel "Function"@en .
+
+<http://www.osp-core.com/mods#HighDimensionalModelRepresentationSimulation> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#Simulation> ;
+    skos:prefLabel "HighDimensionalModelRepresentationSimulation"@en .
+
+<http://www.osp-core.com/mods#InitialReadDetail> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#x_column> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#file> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#ub_factor> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#x_value> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#lb_factor> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#y_column> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#read_function> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#ub_append> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#lb_append> ],
+        ns1:Entity ;
+    skos:prefLabel "InitialReadDetail"@en .
+
+<http://www.osp-core.com/mods#InputData> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#DataSet> ;
+    skos:prefLabel "InputData"@en .
+
+<http://www.osp-core.com/mods#JobID> a owl:Class ;
+    rdfs:subClassOf ns1:Entity ;
+    skos:prefLabel "JobID"@en .
+
+<http://www.osp-core.com/mods#JobIDItem> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#name> ],
+        ns1:Entity ;
+    skos:prefLabel "JobIDItem"@en .
+
+<http://www.osp-core.com/mods#ModelInput> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#path> ],
+        ns1:Entity ;
+    skos:prefLabel "ModelInput"@en .
+
+<http://www.osp-core.com/mods#MultiObjectiveSimulation> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#Simulation> ;
+    skos:prefLabel "MultiObjectiveSimulation"@en .
+
+<http://www.osp-core.com/mods#MultiObjectiveSimulationOnly> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#Simulation> ;
+    skos:prefLabel "MultiObjectiveSimulationOnly"@en .
+
+<http://www.osp-core.com/mods#ParetoFront> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#OutputData> ;
+    skos:prefLabel "ParetoFront"@en .
+
+<http://www.osp-core.com/mods#SampleSRM> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#Simulation> ;
+    skos:prefLabel "SampleSRM"@en .
+
+<http://www.osp-core.com/mods#Sensitivity> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#name> ],
+        ns1:Entity ;
+    skos:prefLabel "Sensitivity"@en .
+
+<http://www.osp-core.com/mods#SensitivityAnalysis> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#Simulation> ;
+    skos:prefLabel "SensitivityAnalysis"@en .
+
+<http://www.osp-core.com/mods#SensitivityDataSet> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#OutputData> ;
+    skos:prefLabel "SensitivityDataSet"@en .
+
+<http://www.osp-core.com/mods#SensitivityItem> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#order> ],
+        <http://www.osp-core.com/mods#DataPointItem> ;
+    skos:prefLabel "SensitivityItem"@en .
+
+<http://www.osp-core.com/mods#Variable> a owl:Class ;
+    ns1:_default [ ns1:_default_attribute <http://www.osp-core.com/mods#weight> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#nParams> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#path> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#objective> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#maximum> ;
+            ns1:_default_value "None" ],
+        [ ns1:_default_attribute <http://www.osp-core.com/mods#minimum> ;
+            ns1:_default_value "None" ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#type> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#maximum> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#objective> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#minimum> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#path> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#nParams> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#name> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#weight> ],
+        ns1:Entity ;
+    skos:prefLabel "Variable"@en .
+
+<http://www.osp-core.com/mods#WorkingReadDetail> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#x_column> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#y_column> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#x_value> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#read_function> ],
+        ns1:Entity ;
+    skos:prefLabel "WorkingReadDetail"@en .
+
+<http://www.osp-core.com/mods#DataPointItem> a owl:Class ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#name> ],
+        [ a owl:Restriction ;
+            owl:cardinality 1 ;
+            owl:onProperty <http://www.osp-core.com/mods#value> ],
+        ns1:Entity ;
+    skos:prefLabel "DataPointItem"@en .
+
+<http://www.osp-core.com/mods#formula> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "formula"@en .
+
+<http://www.osp-core.com/mods#isPartOf> a owl:ObjectProperty ;
+    rdfs:isDefinedBy "inverse of the default relationship"@en ;
+    rdfs:subPropertyOf ns1:passiveRelationship ;
+    skos:prefLabel "isPartOf"@en .
+
+<http://www.osp-core.com/mods#lb_append> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "lb_append"@en .
+
+<http://www.osp-core.com/mods#lb_factor> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "lb_factor"@en .
+
+<http://www.osp-core.com/mods#order> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:integer ;
+    rdfs:subPropertyOf <http://www.osp-core.com/mods#value> ;
+    skos:prefLabel "order"@en .
+
+<http://www.osp-core.com/mods#ub_append> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "ub_append"@en .
+
+<http://www.osp-core.com/mods#ub_factor> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "ub_factor"@en .
+
+<http://www.osp-core.com/mods#DataSet> a owl:Class ;
+    rdfs:subClassOf ns1:Entity ;
+    skos:prefLabel "DataSet"@en .
+
+<http://www.osp-core.com/mods#OutputData> a owl:Class ;
+    rdfs:subClassOf <http://www.osp-core.com/mods#DataSet> ;
+    skos:prefLabel "OutputData"@en .
+
+<http://www.osp-core.com/mods#file> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "file"@en .
+
+<http://www.osp-core.com/mods#hasPart> a owl:ObjectProperty ;
+    rdfs:isDefinedBy "default relationship"@en ;
+    rdfs:subPropertyOf ns1:activeRelationship ;
+    skos:prefLabel "hasPart"@en .
+
+<http://www.osp-core.com/mods#maxNumberOfResults> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "maxNumberOfResults"@en .
+
+<http://www.osp-core.com/mods#maximum> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "maximum"@en .
+
+<http://www.osp-core.com/mods#minimum> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "minimum"@en .
+
+<http://www.osp-core.com/mods#modelToLoad> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "modelToLoad"@en .
+
+<http://www.osp-core.com/mods#nParams> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "nParams"@en .
+
+<http://www.osp-core.com/mods#objective> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "objective"@en .
+
+<http://www.osp-core.com/mods#read_function> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "read_function"@en .
+
+<http://www.osp-core.com/mods#saveSurrogate> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:boolean ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "saveSurrogate"@en .
+
+<http://www.osp-core.com/mods#surrogateToLoad> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "surrogateToLoad"@en .
+
+<http://www.osp-core.com/mods#type> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "type"@en .
+
+<http://www.osp-core.com/mods#value> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "value"@en .
+
+<http://www.osp-core.com/mods#weight> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "weight"@en .
+
+<http://www.osp-core.com/mods#x_column> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "x_column"@en .
+
+<http://www.osp-core.com/mods#x_value> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "x_value"@en .
+
+<http://www.osp-core.com/mods#y_column> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "y_column"@en .
+
+<http://www.osp-core.com/mods#path> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "path"@en .
+
+<http://www.osp-core.com/mods#Simulation> a owl:Class ;
+    rdfs:subClassOf ns1:Entity ;
+    skos:prefLabel "Simulation"@en .
+
+<http://www.osp-core.com/mods#name> a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf ns1:attribute ;
+    skos:prefLabel "name"@en .
+

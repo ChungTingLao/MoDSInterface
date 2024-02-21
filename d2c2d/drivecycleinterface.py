@@ -1,45 +1,8 @@
-import logging
 from osp.core.namespaces import mods, cuba
-from osp.core.utils import pretty_print, export_cuds, import_cuds
 import osp.core.utils.simple_search as search
 import osp.wrappers.sim_cmcl_mods_wrapper.mods_session as ms
-from dotenv import load_dotenv
 import urllib.parse
-import csv
 import numpy as np
-
-# This examples aims to run the success story by hard-coding
-# the input CUDS objects and passing them to the MoDS_Session class
-# for execution.
-
-def readcsvintodict(fn):
-    # return a dictionary with headers as keys, columns as values
-    dict_out={}
-    with open(fn,'r') as f:
-        NK=csv.reader(f)
-        content=[row for row in NK]
-    header=content[0]
-    dict_idx={}
-    for i in range(len(header)):
-        dict_idx[i]=header[i]
-    for i in range(len(header)):
-        dict_out[header[i]]=[]
-    for i in range(1,len(content)):
-        for j in range(len(content[i])):
-            try:
-                dict_out[dict_idx[j]].append(float(content[i][j]))
-            except:
-                dict_out[dict_idx[j]].append(content[i][j])
-    return dict_out
-
-def getdrivecycle(n):
-    # read drive cycle input data, then interpolate into n points (affect run time)
-    drive_cycle=readcsvintodict('EngineSurrogateInput.csv')
-    time=np.linspace(0,1800.0,n)
-    old_time=drive_cycle["Time [s]"]
-    for key in drive_cycle.keys():
-        drive_cycle[key]=np.interp(time,old_time,drive_cycle[key])
-    return drive_cycle
 
 def populateDataset(aDataset,data):
     # given input data, create Dataset instance
@@ -53,11 +16,8 @@ def populateDataset(aDataset,data):
         aDataset.add(data_point, rel=mods.hasPart)
     return aDataset
 
-def prepare_evaluate(logger,surrogateToLoad,inputs,outputs):
+def prepare_evaluate(surrogateToLoad,inputs,outputs):
     # define inputs for an "Evaluate" simulation.
-    logger.info("################  Start: Evaluate ################")
-    logger.info("Loading surrogate: "+surrogateToLoad)
-    logger.info("Setting up the simulation inputs")
 
     evaluate_simulation = mods.EvaluateSurrogate()
     hdmr_algorithm = mods.Algorithm(name="algorithm1", type="GenSurrogateAlg", surrogateToLoad=surrogateToLoad, saveSurrogate=False)
@@ -80,10 +40,8 @@ def prepare_evaluate(logger,surrogateToLoad,inputs,outputs):
 
     return evaluate_simulation
 
-def prepare_twc_thermal(logger,modelToLoad,time,temperature,massflowrate):
+def prepare_twc_thermal(modelToLoad,time,temperature,massflowrate):
     # define inputs for the TWC thermal simulation.
-    logger.info("################  Start: TWC thermal model ################")
-    logger.info("Setting up the simulation inputs")
 
     twc_thermal_simulation = mods.SampleSRM()
     twc_thermal_algorithm = mods.Algorithm(name="algorithm1", type="SamplingAlg", modelToLoad=modelToLoad, saveSurrogate=False)
@@ -143,10 +101,9 @@ def prepare_twc_thermal(logger,modelToLoad,time,temperature,massflowrate):
 
     return twc_thermal_simulation
 
-def run(logger,evaluate_simulation):
+def run(evaluate_simulation):
     # call MoDSSimpleAgent via wrapper, then get output data back
 
-    logger.info("Invoking the wrapper session")
     # Construct a wrapper and run a new session
     with ms.MoDS_Session() as session:
         wrapper = cuba.wrapper(session=session)
@@ -154,13 +111,6 @@ def run(logger,evaluate_simulation):
         wrapper.session.run()
 
         output_data = search.find_cuds_objects_by_oclass(mods.OutputData, wrapper, rel=None)
-
-        logger.info("Printing the simulation results.")
-
-        if output_data:
-            pretty_print(output_data[-1])
-
-    logger.info("################ End ################")
 
     return output_data[-1]
 
@@ -186,10 +136,9 @@ def outputtodict(output_data):
 def createtimefrominput(input_cuds_object):
     input_data = search.find_cuds_objects_by_oclass(mods.InputData, input_cuds_object, rel=None)
     datapoints = search.find_cuds_objects_by_oclass(mods.DataPoint, input_data[0], rel=mods.hasPart)
-    drive_cycle=getdrivecycle(len(datapoints))
-    return drive_cycle["Time [s]"]
+    return np.linspace(0,1800.0,len(datapoints))
 
-def mods_wrapper(input_cuds_object,logger):
+def mods_wrapper(input_cuds_object):
     
     # create drive cycle time, assuming engine sampling points are evenly spaced in time from 0 to 1800 seconds
     # to-do: time should be included in the input cuds object
@@ -197,13 +146,11 @@ def mods_wrapper(input_cuds_object,logger):
     
     # evaluate engine surrogate, store output cuds in dictionary
 
-    engine_out=outputtodict(run(logger,input_cuds_object))
+    engine_out=outputtodict(run(input_cuds_object))
 
     # evaluate TWC thermal simulation, store output cuds in dictionary
 
-    twc_thermal_out=outputtodict(
-        run(logger,prepare_twc_thermal(logger,"twc-thermal",
-                                     drive_cycle_time,engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
+    twc_thermal_out=outputtodict(run(prepare_twc_thermal("twc-thermal",drive_cycle_time,engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
     
     # create input for TWC surrogate
     
@@ -233,4 +180,4 @@ def mods_wrapper(input_cuds_object,logger):
 
     # evaluate TWC surrogate
     
-    return run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs))
+    return run(prepare_evaluate("twc-model-6",twc_inputs,twc_outputs))

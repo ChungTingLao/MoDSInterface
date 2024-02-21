@@ -63,7 +63,6 @@ def c2d(output_cuds_internal,output_dlite):
 
     # import DLite instance
     dlite.storage_path.append(work_dir/"entities")
-    print(dlite.storage_path)
 
     # Get the mappings
     mappings = dlite.Collection.from_location("json",work_dir/"mappings"/"mappings_ss5.json",)

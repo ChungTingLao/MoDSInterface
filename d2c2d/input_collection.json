@@ -1,0 +1,391 @@
+{
+  "9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "C3H6%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "79026e5f-9f3d-447f-aedb-634c99ddf4c5":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "CO2%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "b59582f7-c45a-413b-8ab6-2c547f96665a":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "O2%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "360d9ea9-dbb3-4350-9df2-9ba8e26f8710":   {
+    "meta": "http://onto-ns.com/meta/0.1/EvaluateSurrogate",
+    "dimensions": {
+    },
+    "properties": {
+    }
+  },
+  "89baf43e-6a5b-464f-b109-724560f992e2":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "H2%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7":   {
+    "meta": "http://onto-ns.com/meta/0.1/Algorithm",
+    "dimensions": {
+    },
+    "properties": {
+      "maxNumberOfResults": "None",
+      "modelToLoad": "None",
+      "name": "algorithm1",
+      "saveSurrogate": false,
+      "surrogateToLoad": "engine-surrogate",
+      "type": "GenSurrogateAlg"
+    }
+  },
+  "817e7f15-fb00-4fb8-a06a-97ed9fd10708":   {
+    "meta": "http://onto-ns.com/meta/0.1/Algorithm",
+    "dimensions": {
+    },
+    "properties": {
+      "maxNumberOfResults": "None",
+      "modelToLoad": "None",
+      "name": "algorithm2",
+      "saveSurrogate": false,
+      "surrogateToLoad": "None",
+      "type": "SamplingAlg"
+    }
+  },
+  "1fc1555e-7d49-4796-a734-ae8cbe5abde0":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "BMEP%20%5Bbar%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "input",
+      "weight": "None"
+    }
+  },
+  "98bb9030-8a65-4f01-aef0-cda8c604fb0c":   {
+    "meta": "http://onto-ns.com/meta/0.1/DataPointItem",
+    "dimensions": {
+    },
+    "properties": {
+      "name": "BMEP%20%5Bbar%5D",
+      "value": 1.32028
+    }
+  },
+  "9fc8e56a-995a-41a5-a238-bbe053fbb0c3":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "N2%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f":   {
+    "meta": "http://onto-ns.com/meta/0.1/DataPointItem",
+    "dimensions": {
+    },
+    "properties": {
+      "name": "Engine%20speed%20%5BRPM%5D",
+      "value": 743.392
+    }
+  },
+  "9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4":   {
+    "meta": "http://onto-ns.com/meta/0.1/DataPointItem",
+    "dimensions": {
+    },
+    "properties": {
+      "name": "Engine%20speed%20%5BRPM%5D",
+      "value": 802.985
+    }
+  },
+  "b5ef6a5e-71e3-4098-9fe1-cc52e368ed37":   {
+    "meta": "http://onto-ns.com/meta/0.1/DataPoint",
+    "dimensions": {
+    },
+    "properties": {
+    }
+  },
+  "8d835428-a04b-590e-b9e6-b3b63f325cc9":   {
+    "uri": "uuid-collection",
+    "meta": "http://onto-ns.com/meta/0.1/Collection",
+    "dimensions": {
+      "nrelations": 108
+    },
+    "properties": {
+      "relations": [
+        ["a3d74519-63cc-4c3b-bcec-28aa8e600f0f", "_is-a", "Instance"],
+        ["a3d74519-63cc-4c3b-bcec-28aa8e600f0f", "_has-uuid", "a3d74519-63cc-4c3b-bcec-28aa8e600f0f", "xsd:anyURI"],
+        ["a3d74519-63cc-4c3b-bcec-28aa8e600f0f", "_has-meta", "http://onto-ns.com/meta/0.1/DataPointItem"],
+        ["a3d74519-63cc-4c3b-bcec-28aa8e600f0f", "http://www.osp-core.com/mods#isPartOf", "d5e5bff0-45cb-4e24-b959-82d727b60092"],
+        ["9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4", "_is-a", "Instance"],
+        ["9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4", "_has-uuid", "9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4", "xsd:anyURI"],
+        ["9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4", "_has-meta", "http://onto-ns.com/meta/0.1/DataPointItem"],
+        ["9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4", "http://www.osp-core.com/mods#isPartOf", "b5ef6a5e-71e3-4098-9fe1-cc52e368ed37"],
+        ["0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f", "_is-a", "Instance"],
+        ["0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f", "_has-uuid", "0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f", "xsd:anyURI"],
+        ["0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f", "_has-meta", "http://onto-ns.com/meta/0.1/DataPointItem"],
+        ["0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f", "http://www.osp-core.com/mods#isPartOf", "d5e5bff0-45cb-4e24-b959-82d727b60092"],
+        ["98bb9030-8a65-4f01-aef0-cda8c604fb0c", "_is-a", "Instance"],
+        ["98bb9030-8a65-4f01-aef0-cda8c604fb0c", "_has-uuid", "98bb9030-8a65-4f01-aef0-cda8c604fb0c", "xsd:anyURI"],
+        ["98bb9030-8a65-4f01-aef0-cda8c604fb0c", "_has-meta", "http://onto-ns.com/meta/0.1/DataPointItem"],
+        ["98bb9030-8a65-4f01-aef0-cda8c604fb0c", "http://www.osp-core.com/mods#isPartOf", "b5ef6a5e-71e3-4098-9fe1-cc52e368ed37"],
+        ["b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "_is-a", "Instance"],
+        ["b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "_has-uuid", "b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "xsd:anyURI"],
+        ["b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "_has-meta", "http://onto-ns.com/meta/0.1/DataPoint"],
+        ["b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "http://www.osp-core.com/mods#hasPart", "98bb9030-8a65-4f01-aef0-cda8c604fb0c"],
+        ["b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "http://www.osp-core.com/mods#hasPart", "9e58c4e6-b4dd-43ee-b45c-b3c214d24fd4"],
+        ["b5ef6a5e-71e3-4098-9fe1-cc52e368ed37", "http://www.osp-core.com/mods#isPartOf", "a674eb3e-f349-461f-94b7-c2d232177cd0"],
+        ["d5e5bff0-45cb-4e24-b959-82d727b60092", "_is-a", "Instance"],
+        ["d5e5bff0-45cb-4e24-b959-82d727b60092", "_has-uuid", "d5e5bff0-45cb-4e24-b959-82d727b60092", "xsd:anyURI"],
+        ["d5e5bff0-45cb-4e24-b959-82d727b60092", "_has-meta", "http://onto-ns.com/meta/0.1/DataPoint"],
+        ["d5e5bff0-45cb-4e24-b959-82d727b60092", "http://www.osp-core.com/mods#hasPart", "0c9657a1-99ed-4a56-8cd9-3eb55ad0ee3f"],
+        ["d5e5bff0-45cb-4e24-b959-82d727b60092", "http://www.osp-core.com/mods#hasPart", "a3d74519-63cc-4c3b-bcec-28aa8e600f0f"],
+        ["d5e5bff0-45cb-4e24-b959-82d727b60092", "http://www.osp-core.com/mods#isPartOf", "a674eb3e-f349-461f-94b7-c2d232177cd0"],
+        ["79026e5f-9f3d-447f-aedb-634c99ddf4c5", "_is-a", "Instance"],
+        ["79026e5f-9f3d-447f-aedb-634c99ddf4c5", "_has-uuid", "79026e5f-9f3d-447f-aedb-634c99ddf4c5", "xsd:anyURI"],
+        ["79026e5f-9f3d-447f-aedb-634c99ddf4c5", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["79026e5f-9f3d-447f-aedb-634c99ddf4c5", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["85d81bda-0bdf-4cd7-a690-0003d34ee2ce", "_is-a", "Instance"],
+        ["85d81bda-0bdf-4cd7-a690-0003d34ee2ce", "_has-uuid", "85d81bda-0bdf-4cd7-a690-0003d34ee2ce", "xsd:anyURI"],
+        ["85d81bda-0bdf-4cd7-a690-0003d34ee2ce", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["85d81bda-0bdf-4cd7-a690-0003d34ee2ce", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["d18d2739-4b8b-4883-aab4-5bd6a1a25375", "_is-a", "Instance"],
+        ["d18d2739-4b8b-4883-aab4-5bd6a1a25375", "_has-uuid", "d18d2739-4b8b-4883-aab4-5bd6a1a25375", "xsd:anyURI"],
+        ["d18d2739-4b8b-4883-aab4-5bd6a1a25375", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["d18d2739-4b8b-4883-aab4-5bd6a1a25375", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["91a31bda-5db3-4b62-a490-10f7ec09ee84", "_is-a", "Instance"],
+        ["91a31bda-5db3-4b62-a490-10f7ec09ee84", "_has-uuid", "91a31bda-5db3-4b62-a490-10f7ec09ee84", "xsd:anyURI"],
+        ["91a31bda-5db3-4b62-a490-10f7ec09ee84", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["91a31bda-5db3-4b62-a490-10f7ec09ee84", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["9fc8e56a-995a-41a5-a238-bbe053fbb0c3", "_is-a", "Instance"],
+        ["9fc8e56a-995a-41a5-a238-bbe053fbb0c3", "_has-uuid", "9fc8e56a-995a-41a5-a238-bbe053fbb0c3", "xsd:anyURI"],
+        ["9fc8e56a-995a-41a5-a238-bbe053fbb0c3", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["9fc8e56a-995a-41a5-a238-bbe053fbb0c3", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["b59582f7-c45a-413b-8ab6-2c547f96665a", "_is-a", "Instance"],
+        ["b59582f7-c45a-413b-8ab6-2c547f96665a", "_has-uuid", "b59582f7-c45a-413b-8ab6-2c547f96665a", "xsd:anyURI"],
+        ["b59582f7-c45a-413b-8ab6-2c547f96665a", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["b59582f7-c45a-413b-8ab6-2c547f96665a", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["facefc3c-7c27-4e85-81d8-0b3f0cd3f601", "_is-a", "Instance"],
+        ["facefc3c-7c27-4e85-81d8-0b3f0cd3f601", "_has-uuid", "facefc3c-7c27-4e85-81d8-0b3f0cd3f601", "xsd:anyURI"],
+        ["facefc3c-7c27-4e85-81d8-0b3f0cd3f601", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["facefc3c-7c27-4e85-81d8-0b3f0cd3f601", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["0f5a6cb4-9db1-4359-bc0b-ad173726aa62", "_is-a", "Instance"],
+        ["0f5a6cb4-9db1-4359-bc0b-ad173726aa62", "_has-uuid", "0f5a6cb4-9db1-4359-bc0b-ad173726aa62", "xsd:anyURI"],
+        ["0f5a6cb4-9db1-4359-bc0b-ad173726aa62", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["0f5a6cb4-9db1-4359-bc0b-ad173726aa62", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa", "_is-a", "Instance"],
+        ["9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa", "_has-uuid", "9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa", "xsd:anyURI"],
+        ["9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["f4049238-9c90-4e96-b68c-3c8240271d56", "_is-a", "Instance"],
+        ["f4049238-9c90-4e96-b68c-3c8240271d56", "_has-uuid", "f4049238-9c90-4e96-b68c-3c8240271d56", "xsd:anyURI"],
+        ["f4049238-9c90-4e96-b68c-3c8240271d56", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["f4049238-9c90-4e96-b68c-3c8240271d56", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["89baf43e-6a5b-464f-b109-724560f992e2", "_is-a", "Instance"],
+        ["89baf43e-6a5b-464f-b109-724560f992e2", "_has-uuid", "89baf43e-6a5b-464f-b109-724560f992e2", "xsd:anyURI"],
+        ["89baf43e-6a5b-464f-b109-724560f992e2", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["89baf43e-6a5b-464f-b109-724560f992e2", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["1fc1555e-7d49-4796-a734-ae8cbe5abde0", "_is-a", "Instance"],
+        ["1fc1555e-7d49-4796-a734-ae8cbe5abde0", "_has-uuid", "1fc1555e-7d49-4796-a734-ae8cbe5abde0", "xsd:anyURI"],
+        ["1fc1555e-7d49-4796-a734-ae8cbe5abde0", "_has-meta", "http://onto-ns.com/meta/0.1/Variable"],
+        ["1fc1555e-7d49-4796-a734-ae8cbe5abde0", "http://www.osp-core.com/mods#isPartOf", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "_is-a", "Instance"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "_has-uuid", "817e7f15-fb00-4fb8-a06a-97ed9fd10708", "xsd:anyURI"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "_has-meta", "http://onto-ns.com/meta/0.1/Algorithm"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "0f5a6cb4-9db1-4359-bc0b-ad173726aa62"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "1fc1555e-7d49-4796-a734-ae8cbe5abde0"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "79026e5f-9f3d-447f-aedb-634c99ddf4c5"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "85d81bda-0bdf-4cd7-a690-0003d34ee2ce"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "89baf43e-6a5b-464f-b109-724560f992e2"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "91a31bda-5db3-4b62-a490-10f7ec09ee84"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "9a42a5a6-b8d3-48cb-a865-0d01dabfd7fa"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "9fc8e56a-995a-41a5-a238-bbe053fbb0c3"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "b59582f7-c45a-413b-8ab6-2c547f96665a"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "d18d2739-4b8b-4883-aab4-5bd6a1a25375"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "f4049238-9c90-4e96-b68c-3c8240271d56"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#hasPart", "facefc3c-7c27-4e85-81d8-0b3f0cd3f601"],
+        ["817e7f15-fb00-4fb8-a06a-97ed9fd10708", "http://www.osp-core.com/mods#isPartOf", "360d9ea9-dbb3-4350-9df2-9ba8e26f8710"],
+        ["dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7", "_is-a", "Instance"],
+        ["dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7", "_has-uuid", "dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7", "xsd:anyURI"],
+        ["dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7", "_has-meta", "http://onto-ns.com/meta/0.1/Algorithm"],
+        ["dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7", "http://www.osp-core.com/mods#isPartOf", "360d9ea9-dbb3-4350-9df2-9ba8e26f8710"],
+        ["360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "_is-a", "Instance"],
+        ["360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "_has-uuid", "360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "xsd:anyURI"],
+        ["360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "_has-meta", "http://onto-ns.com/meta/0.1/EvaluateSurrogate"],
+        ["360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "http://www.osp-core.com/mods#hasPart", "817e7f15-fb00-4fb8-a06a-97ed9fd10708"],
+        ["360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "http://www.osp-core.com/mods#hasPart", "a674eb3e-f349-461f-94b7-c2d232177cd0"],
+        ["360d9ea9-dbb3-4350-9df2-9ba8e26f8710", "http://www.osp-core.com/mods#hasPart", "dcb6ef70-4768-43d5-8ea2-cd9f4f5c06c7"],
+        ["a674eb3e-f349-461f-94b7-c2d232177cd0", "_is-a", "Instance"],
+        ["a674eb3e-f349-461f-94b7-c2d232177cd0", "_has-uuid", "a674eb3e-f349-461f-94b7-c2d232177cd0", "xsd:anyURI"],
+        ["a674eb3e-f349-461f-94b7-c2d232177cd0", "_has-meta", "http://onto-ns.com/meta/0.1/InputData"],
+        ["a674eb3e-f349-461f-94b7-c2d232177cd0", "http://www.osp-core.com/mods#hasPart", "b5ef6a5e-71e3-4098-9fe1-cc52e368ed37"],
+        ["a674eb3e-f349-461f-94b7-c2d232177cd0", "http://www.osp-core.com/mods#hasPart", "d5e5bff0-45cb-4e24-b959-82d727b60092"],
+        ["a674eb3e-f349-461f-94b7-c2d232177cd0", "http://www.osp-core.com/mods#isPartOf", "360d9ea9-dbb3-4350-9df2-9ba8e26f8710"]
+      ]
+    }
+  },
+  "91a31bda-5db3-4b62-a490-10f7ec09ee84":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "Temperature%20%5BK%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "a674eb3e-f349-461f-94b7-c2d232177cd0":   {
+    "meta": "http://onto-ns.com/meta/0.1/InputData",
+    "dimensions": {
+    },
+    "properties": {
+    }
+  },
+  "0f5a6cb4-9db1-4359-bc0b-ad173726aa62":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "CO%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "d5e5bff0-45cb-4e24-b959-82d727b60092":   {
+    "meta": "http://onto-ns.com/meta/0.1/DataPoint",
+    "dimensions": {
+    },
+    "properties": {
+    }
+  },
+  "a3d74519-63cc-4c3b-bcec-28aa8e600f0f":   {
+    "meta": "http://onto-ns.com/meta/0.1/DataPointItem",
+    "dimensions": {
+    },
+    "properties": {
+      "name": "BMEP%20%5Bbar%5D",
+      "value": 0
+    }
+  },
+  "facefc3c-7c27-4e85-81d8-0b3f0cd3f601":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "Total%20flow%20%5Bg%2Fh%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "f4049238-9c90-4e96-b68c-3c8240271d56":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "H2O%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "d18d2739-4b8b-4883-aab4-5bd6a1a25375":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "NO%20mass%20fraction%20%5B%2D%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "output",
+      "weight": "None"
+    }
+  },
+  "85d81bda-0bdf-4cd7-a690-0003d34ee2ce":   {
+    "meta": "http://onto-ns.com/meta/0.1/Variable",
+    "dimensions": {
+    },
+    "properties": {
+      "maximum": "None",
+      "minimum": "None",
+      "nParams": "None",
+      "name": "Engine%20speed%20%5BRPM%5D",
+      "objective": "None",
+      "path": "None",
+      "type": "input",
+      "weight": "None"
+    }
+  }
+}

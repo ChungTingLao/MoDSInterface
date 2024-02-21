@@ -1,0 +1,7 @@
+identifier: mods
+ontology_file: mods.ttl
+format: "text/turtle"
+requirements:
+  - cuba
+namespaces:
+  mods: http://www.osp-core.com/mods
