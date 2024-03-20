@@ -1,6 +1,6 @@
 import logging
 from osp.core.namespaces import mods, cuba
-from osp.core.utils import pretty_print
+from osp.core.utils import pretty_print, export_cuds
 import osp.core.utils.simple_search as search
 import osp.wrappers.sim_cmcl_mods_wrapper.mods_session as ms
 from dotenv import load_dotenv
@@ -51,26 +51,9 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
 
     example_data = [
         ["Engine%20speed%20%5BRPM%5D", "BMEP%20%5Bbar%5D"],
-        [7.433921000000000276e+02,0.000000000000000000e+00],
-        [7.438565710999999965e+02,0.000000000000000000e+00],
-        [7.443265066000000161e+02,0.000000000000000000e+00],
-        [7.448182996000000458e+02,0.000000000000000000e+00],
-        [7.453100924999999961e+02,0.000000000000000000e+00],
-        [7.458018855000000258e+02,0.000000000000000000e+00],
-        [7.462936783999999761e+02,0.000000000000000000e+00],
-        [7.467854714000000058e+02,0.000000000000000000e+00],
-        [7.472772644000000355e+02,0.000000000000000000e+00],
-        [7.477690572999999858e+02,3.919999999999999941e-18],
-        [7.482608503000000155e+02,3.530095999999999928e-03],
-        [7.487315873999999667e+02,8.614867000000000011e-03],
-        [7.491181014999999661e+02,1.991833800000000071e-02],
-        [7.493930477000000110e+02,2.076699400000000043e-02],
-        [7.495006421000000500e+02,5.933426999999999799e-03],
-        [7.496082366000000548e+02,0.000000000000000000e+00],
-        [7.497158309999999801e+02,0.000000000000000000e+00],
-        [7.498234254999999848e+02,0.000000000000000000e+00],
-        [7.499310199000000239e+02,0.000000000000000000e+00],
-        [7.500386144000000286e+02,0.000000000000000000e+00]
+        [1000.0,1.0],
+        [1500.0,5.0],
+        [2000.0,10.0]
     ]
 
     example_data_header = example_data[0]
@@ -88,6 +71,21 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
         input_data.add(data_point, rel=mods.hasPart)
 
     evaluate_simulation.add(input_data)
+    
+    DataPoints = search.find_cuds_objects_by_oclass(
+        mods.DataPoint, input_data, rel=mods.hasPart
+    )
+    
+    list_input_data_uid=[]
+    count=0
+    
+    for DP in DataPoints:
+        count=count+1
+        list_input_data_uid.append(DP.uid)
+    
+    pretty_print(input_data)
+    
+    export_cuds(evaluate_simulation,file="examples/engine_in.ttl", format="ttl")
 
     output_data = None
 
@@ -109,11 +107,47 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
 
         if output_data:
             pretty_print(output_data[0])
+            DataPoints = search.find_cuds_objects_by_oclass(
+                mods.DataPoint, output_data[0], rel=mods.hasPart
+            )
+            
+            list_output_data_uid=[]
+            count=0
+            
+            for DP in DataPoints:
+                count=count+1
+                list_output_data_uid.append(DP.uid)
         if job_id:
             pretty_print(job_id[0])
+        
+        eva = search.find_cuds_objects_by_oclass(
+            mods.EvaluateSurrogate, wrapper, rel=None
+        )
+        
+        export_cuds(eva[0],file="examples/engine_all.ttl", format="ttl")
 
     logger.info(
         "################  End: Engine Surrogate ################")
+    
+    export_cuds(output_data[0],file="examples/engine_out.ttl", format="ttl")
+    
+    for i in range(count):
+        DPi=search.find_cuds_object_by_uid(list_input_data_uid[i],eva[0],rel=None)
+        items=search.find_cuds_objects_by_oclass(
+            mods.DataPointItem, DPi, rel=mods.hasPart
+        )
+        for item in items:
+            if "speed" in item.name:
+                input_value=item.value
+        DPo=search.find_cuds_object_by_uid(list_output_data_uid[i],eva[0],rel=None)
+        items=search.find_cuds_objects_by_oclass(
+            mods.DataPointItem, DPo, rel=mods.hasPart
+        )
+        for item in items:
+            if "Temperature" in item.name:
+                output_value=item.value
+        print("speed= "+input_value+", temperature= "+output_value)
+        
 
     return output_data
 
