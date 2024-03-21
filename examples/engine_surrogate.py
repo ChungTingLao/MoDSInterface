@@ -13,15 +13,13 @@ logger.handlers[0].setFormatter(
     logging.Formatter("%(levelname)s %(asctime)s [%(name)s]: %(message)s")
 )
 
-# This examples aims to run the amiii forward use case by hard-coding
+# This examples aims to run a engine surrogate by hard-coding
 # the input CUDS objects and passing them to the MoDS_Session class
 # for execution.
 
 
 def evaluate_example(surrogateToLoad="engine-surrogate"):
-    logger.info(
-        "################  Start: Engine Surrogate ################")
-    #logger.info("Loading environment variables")
+    logger.info("################  Start: Engine Surrogate ################")
     load_dotenv()
     #os.environ["MODS_AGENT_BASE_URL"]="http://localhost:58085"
     logger.info("Setting up the simulation inputs")
@@ -52,7 +50,7 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
     evaluate_simulation.add(evaluate_algorithm)
 
     example_data = [
-        ["time%5Bs%5D","Engine%20speed%20%5BRPM%5D", "BMEP%20%5Bbar%5D"],
+        ["Time%5Bs%5D","Engine%20speed%20%5BRPM%5D", "BMEP%20%5Bbar%5D"],
         [0.0,1000.0,1.0],
         [900.0,1500.0,5.0],
         [1800.0,2000.0,10.0]
@@ -112,7 +110,7 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
         mods.DataPoint, input_data, rel=mods.hasPart
     )
     
-    input_name="time"
+    input_name="Time"
     output_name="Temperature"
     
     for input_data_point in list_input_data_point:
