@@ -17,6 +17,18 @@ ontology:
     inverse: mods.hasPart
     subclass_of:
       - cuba.passiveRelationship
+  
+  isDerivedFrom:
+    description: "links output to input"
+    inverse: mods.isSourceOf
+    subclass_of:
+      - cuba.activeRelationship
+  
+  isSourceOf:
+    description: "links input to output"
+    inverse: mods.isDerivedFrom
+    subclass_of:
+      - cuba.passiveRelationship
 
   ################ MAIN ENTITIES ################
   #================================================#
@@ -158,6 +170,9 @@ ontology:
       - mods.hasPart:
           cardinality: some
           range: mods.DataPointItem
+      - mods.isDerivedFrom:
+          cardinality: some
+          range: mods.DataPoint
 
   DataPointItem:
     subclass_of:

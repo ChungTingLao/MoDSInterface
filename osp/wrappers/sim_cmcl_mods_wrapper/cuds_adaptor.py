@@ -82,11 +82,6 @@ class CUDS_Adaptor:
                 jsonData=jsonData,
             )
 
-            CUDS_Adaptor.inputAnalyticModelCUDStoJSON(
-                root_cuds_object=root_cuds_object,
-                jsonData=jsonData,
-            )
-
         jsonDataStr = json.dumps(jsonData)
         return jsonDataStr
 
@@ -351,7 +346,13 @@ class CUDS_Adaptor:
             output_data = mods.OutputData()
             simulation = root_cuds_object.get(
                 oclass=mods.EvaluateSurrogate, rel=cuba.relationship)[0]
-
+            
+            input_data = simulation.get(
+                oclass=mods.InputData, rel=None)[0]
+            
+            input_data_points = input_data.get(
+                oclass=mods.DataPoint, rel=mods.hasPart)
+            
             num_values = len(jsonResults[OUTPUTS_KEY][0]["values"])
             for i in range(num_values):
                 data_point = mods.DataPoint()
@@ -363,6 +364,12 @@ class CUDS_Adaptor:
                         mods.DataPointItem(name=out_name, value=out_value),
                         rel=mods.hasPart,
                     )
+
+                data_point.add(
+                    input_data_points[i],
+                    rel=mods.isDerivedFrom,
+                )
+                    
                 output_data.add(
                     data_point,
                     rel=mods.hasPart,

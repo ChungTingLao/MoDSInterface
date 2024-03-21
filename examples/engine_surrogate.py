@@ -4,6 +4,7 @@ from osp.core.utils import pretty_print, export_cuds
 import osp.core.utils.simple_search as search
 import osp.wrappers.sim_cmcl_mods_wrapper.mods_session as ms
 from dotenv import load_dotenv
+import os
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -20,8 +21,9 @@ logger.handlers[0].setFormatter(
 def evaluate_example(surrogateToLoad="engine-surrogate"):
     logger.info(
         "################  Start: Engine Surrogate ################")
-    logger.info("Loading environment variables")
+    #logger.info("Loading environment variables")
     load_dotenv()
+    #os.environ["MODS_AGENT_BASE_URL"]="http://localhost:58085"
     logger.info("Setting up the simulation inputs")
 
     evaluate_simulation = mods.EvaluateSurrogate()
@@ -50,10 +52,10 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
     evaluate_simulation.add(evaluate_algorithm)
 
     example_data = [
-        ["Engine%20speed%20%5BRPM%5D", "BMEP%20%5Bbar%5D"],
-        [1000.0,1.0],
-        [1500.0,5.0],
-        [2000.0,10.0]
+        ["time%5Bs%5D","Engine%20speed%20%5BRPM%5D", "BMEP%20%5Bbar%5D"],
+        [0.0,1000.0,1.0],
+        [900.0,1500.0,5.0],
+        [1800.0,2000.0,10.0]
     ]
 
     example_data_header = example_data[0]
@@ -72,22 +74,7 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
 
     evaluate_simulation.add(input_data)
     
-    DataPoints = search.find_cuds_objects_by_oclass(
-        mods.DataPoint, input_data, rel=mods.hasPart
-    )
-    
-    list_input_data_uid=[]
-    count=0
-    
-    for DP in DataPoints:
-        count=count+1
-        list_input_data_uid.append(DP.uid)
-    
-    pretty_print(input_data)
-    
     export_cuds(evaluate_simulation,file="examples/engine_in.ttl", format="ttl")
-
-    output_data = None
 
     logger.info("Invoking the wrapper session")
     # Construct a wrapper and run a new session
@@ -105,52 +92,46 @@ def evaluate_example(surrogateToLoad="engine-surrogate"):
 
         logger.info("Printing the simulation results.")
 
-        if output_data:
-            pretty_print(output_data[0])
-            DataPoints = search.find_cuds_objects_by_oclass(
-                mods.DataPoint, output_data[0], rel=mods.hasPart
-            )
+        if output_data: pretty_print(output_data[0])
             
-            list_output_data_uid=[]
-            count=0
-            
-            for DP in DataPoints:
-                count=count+1
-                list_output_data_uid.append(DP.uid)
-        if job_id:
-            pretty_print(job_id[0])
+        if job_id: pretty_print(job_id[0])
         
-        eva = search.find_cuds_objects_by_oclass(
-            mods.EvaluateSurrogate, wrapper, rel=None
-        )
-        
-        export_cuds(eva[0],file="examples/engine_all.ttl", format="ttl")
-
-    logger.info(
-        "################  End: Engine Surrogate ################")
+    eva = search.find_cuds_objects_by_oclass(
+        mods.EvaluateSurrogate, wrapper, rel=None
+    )
+    
+    export_cuds(eva[0],file="examples/engine_all.ttl", format="ttl")
     
     export_cuds(output_data[0],file="examples/engine_out.ttl", format="ttl")
     
-    for i in range(count):
-        DPi=search.find_cuds_object_by_uid(list_input_data_uid[i],eva[0],rel=None)
-        items=search.find_cuds_objects_by_oclass(
-            mods.DataPointItem, DPi, rel=mods.hasPart
-        )
-        for item in items:
-            if "speed" in item.name:
-                input_value=item.value
-        DPo=search.find_cuds_object_by_uid(list_output_data_uid[i],eva[0],rel=None)
-        items=search.find_cuds_objects_by_oclass(
-            mods.DataPointItem, DPo, rel=mods.hasPart
-        )
-        for item in items:
-            if "Temperature" in item.name:
-                output_value=item.value
-        print("speed= "+input_value+", temperature= "+output_value)
-        
+    input_data = search.find_cuds_objects_by_oclass(
+            mods.InputData, wrapper, rel=None
+        )[0]
+    
+    list_input_data_point=search.find_cuds_objects_by_oclass(
+        mods.DataPoint, input_data, rel=mods.hasPart
+    )
+    
+    input_name="time"
+    output_name="Temperature"
+    
+    for input_data_point in list_input_data_point:
+        input_value=find_data_point_item_by_name(input_data_point,input_name)
+        output_data_point = input_data_point.get(rel=mods.isSourceOf)[0]
+        output_value=find_data_point_item_by_name(output_data_point,output_name)
+        print("%s=%s,%s=%s"%(input_name,input_value,output_name,output_value))
+    
+    logger.info("################  End: Engine Surrogate ################")
 
     return output_data
 
+def find_data_point_item_by_name(data_point,name):
+    items=search.find_cuds_objects_by_oclass(
+        mods.DataPointItem, data_point, rel=mods.hasPart
+    )
+    for item in items:
+        if name in item.name:
+            return item.value
 
 if __name__ == "__main__":
     evaluate_example()
