@@ -7,6 +7,10 @@ from dotenv import load_dotenv
 import urllib.parse
 import csv
 import numpy as np
+import os
+
+from pathlib import Path
+dir_path = Path(__file__).parent.resolve()
 
 # This examples aims to run the success story by hard-coding
 # the input CUDS objects and passing them to the MoDS_Session class
@@ -159,7 +163,7 @@ def run(logger,simulation,export_name=None):
 
         if output_data:
             if export_name:
-                export_cuds(sim,file="examples/"+export_name+".ttl",format="ttl")
+                export_cuds(sim,file=os.path.join(dir_path,export_name+".ttl"),format="ttl")
             return sim
         else:
             pretty_print(sim)
@@ -207,7 +211,7 @@ def outputtodict(sim,find_time=True):
 
 def create_input_cuds(path_input):
     try:
-        input_cuds_object=import_cuds("examples/drive_cycle_input.ttl", format="ttl")
+        input_cuds_object=import_cuds(os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
     except ValueError:
         # create input CUDS object by code
 
@@ -235,7 +239,7 @@ def mods_wrapper(input_cuds_object):
       
     # evaluate engine surrogate, store output cuds in dictionary
 
-    engine_out=outputtodict(run(logger,input_cuds_object,"engine-out"))
+    engine_out=outputtodict(run(logger,input_cuds_object,"drive_cycle_engine_out"))
     
     # evaluate TWC thermal simulation, store output cuds in dictionary
 
@@ -244,13 +248,10 @@ def mods_wrapper(input_cuds_object):
                                      engine_out["Time [s]"],
                                      engine_out["Temperature [K]"],
                                      engine_out["Total flow [g/h]"]),
-            "twc-thermal"),
+            "drive_cycle_twc_thermal"),
         find_time=False
         )
-    
-    for key in twc_thermal_out:
-        print(key)
-    
+
     # create input for TWC surrogate
     
     twc_inputs=[{"name":"Temperature%20%5BK%5D"},
@@ -289,11 +290,12 @@ if __name__ == "__main__":
     logger.handlers[0].setFormatter(logging.Formatter("%(levelname)s %(asctime)s [%(name)s]: %(message)s"))
     logger.info("Loading environment variables")
     load_dotenv()
+    #os.environ["MODS_AGENT_BASE_URL"]="http://localhost:58085"
 
-    input_cuds_object=create_input_cuds("examples/simple_cycle.csv")
+    input_cuds_object=create_input_cuds(os.path.join(dir_path,"simple_cycle.csv"))
     
-    export_cuds(input_cuds_object,file="examples/drive_cycle_input.ttl", format="ttl")
+    export_cuds(input_cuds_object,file=os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
 
     output_cuds_object=mods_wrapper(input_cuds_object)
 
-    export_cuds(output_cuds_object,file="examples/drive_cycle_output.ttl", format="ttl")
+    export_cuds(output_cuds_object,file=os.path.join(dir_path,"drive_cycle_output.ttl"), format="ttl")

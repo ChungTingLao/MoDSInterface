@@ -1,9 +1,13 @@
 import logging
 from osp.core.namespaces import mods, cuba
-from osp.core.utils import pretty_print
+from osp.core.utils import pretty_print, export_cuds
 import osp.core.utils.simple_search as search
 import osp.wrappers.sim_cmcl_mods_wrapper.mods_session as ms
 from dotenv import load_dotenv
+import os
+
+from pathlib import Path
+dir_path = Path(__file__).parent.resolve()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -110,6 +114,8 @@ def evaluate_example(modelToLoad="twc-thermal"):
     model_input.add(model_input_data, rel=mods.hasPart)
 
     twc_thermal_simulation.add(model_input)
+    
+    export_cuds(twc_thermal_simulation,file=os.path.join(dir_path,"twc_thermal_in.ttl"), format="ttl")
 
     logger.info("Invoking the wrapper session")
     # Construct a wrapper and run a new session
@@ -127,13 +133,19 @@ def evaluate_example(modelToLoad="twc-thermal"):
 
         logger.info("Printing the simulation results.")
 
-        if output_data:
-            pretty_print(output_data[1]) # output_data[0] is the one created above as part of input
-        if job_id:
-            pretty_print(job_id[0])
+        if output_data: pretty_print(output_data[1]) # output_data[0] is the one created above as part of input
+        
+        if job_id: pretty_print(job_id[0])
+    
+    sampleSRM=search.find_cuds_objects_by_oclass(
+        mods.SampleSRM, wrapper, rel=None
+    )
+    
+    export_cuds(sampleSRM[0],file=os.path.join(dir_path,"twc_thermal_all.ttl"), format="ttl")
+    
+    export_cuds(output_data[1],file=os.path.join(dir_path,"twc_thermal_out.ttl"), format="ttl")
 
-    logger.info(
-        "################  End: TWC thermal model ################")
+    logger.info("################  End: TWC thermal model ################")
 
     return output_data
 

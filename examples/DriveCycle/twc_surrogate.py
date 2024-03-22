@@ -4,6 +4,10 @@ from osp.core.utils import pretty_print, export_cuds
 import osp.core.utils.simple_search as search
 import osp.wrappers.sim_cmcl_mods_wrapper.mods_session as ms
 from dotenv import load_dotenv
+import os
+
+from pathlib import Path
+dir_path = Path(__file__).parent.resolve()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -77,7 +81,7 @@ def evaluate_example(surrogateToLoad="twc-model-6"):
 
     evaluate_simulation.add(input_data)
 
-    export_cuds(evaluate_simulation,file="examples/twc_in.ttl", format="ttl")
+    export_cuds(evaluate_simulation,file=os.path.join(dir_path,"twc_in.ttl"), format="ttl")
 
     logger.info("Invoking the wrapper session")
     # Construct a wrapper and run a new session
@@ -102,10 +106,10 @@ def evaluate_example(surrogateToLoad="twc-model-6"):
         mods.EvaluateSurrogate, wrapper, rel=None
     )
     
-    export_cuds(eva[0],file="examples/twc_all.ttl", format="ttl")
+    export_cuds(eva[0],file=os.path.join(dir_path,"twc_all.ttl"), format="ttl")
     
     
-    export_cuds(output_data[0],file="examples/twc_out.ttl", format="ttl")
+    export_cuds(output_data[0],file=os.path.join(dir_path,"twc_out.ttl"), format="ttl")
     
     input_data = search.find_cuds_objects_by_oclass(
             mods.InputData, wrapper, rel=None
@@ -135,7 +139,6 @@ def find_data_point_item_by_name(data_point,name):
     for item in items:
         if name in item.name:
             return item.value
-
 
 if __name__ == "__main__":
     evaluate_example()
