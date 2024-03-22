@@ -292,7 +292,7 @@ if __name__ == "__main__":
     load_dotenv()
     #os.environ["MODS_AGENT_BASE_URL"]="http://localhost:58085"
 
-    input_cuds_object=create_input_cuds(os.path.join(dir_path,"simple_cycle.csv"))
+    input_cuds_object=create_input_cuds(os.path.join(dir_path,"EngineSurrogateInput.csv"))
     
     export_cuds(input_cuds_object,file=os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
 
