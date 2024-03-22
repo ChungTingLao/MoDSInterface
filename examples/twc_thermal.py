@@ -12,7 +12,7 @@ logger.handlers[0].setFormatter(
     logging.Formatter("%(levelname)s %(asctime)s [%(name)s]: %(message)s")
 )
 
-# This examples aims to run the amiii forward use case by hard-coding
+# This examples aims to run the TWC warmup case in SRM by hard-coding
 # the input CUDS objects and passing them to the MoDS_Session class
 # for execution.
 

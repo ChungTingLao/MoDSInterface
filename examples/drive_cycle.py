@@ -32,9 +32,9 @@ def readcsvintodict(fn):
                 dict_out[dict_idx[j]].append(content[i][j])
     return dict_out
 
-def getdrivecycle(n):
+def getdrivecycle(path_input,n):
     # read drive cycle input data, then interpolate into n points (affect run time)
-    drive_cycle=readcsvintodict('examples/EngineSurrogateInput.csv')
+    drive_cycle=readcsvintodict(path_input)
     time=np.linspace(0,1800.0,n)
     old_time=drive_cycle["Time [s]"]
     for key in drive_cycle.keys():
@@ -53,7 +53,7 @@ def populateDataset(aDataset,data):
         aDataset.add(data_point, rel=mods.hasPart)
     return aDataset
 
-def prepare_evaluate(logger,surrogateToLoad,inputs,outputs):
+def prepare_evaluate(logger,surrogateToLoad,inputs,outputs,time):
     # define inputs for an "Evaluate" simulation.
     logger.info("################  Start: Evaluate ################")
     logger.info("Loading surrogate: "+surrogateToLoad)
@@ -70,10 +70,10 @@ def prepare_evaluate(logger,surrogateToLoad,inputs,outputs):
     evaluate_simulation.add(evaluate_algorithm)
 
     example_data=[]
-    example_data.append([input["name"] for input in inputs])
+    example_data.append(["Time [s]"]+[input["name"] for input in inputs])
     for i in range(len(inputs[0]["values"])):
-        example_data.append([input["values"][i] for input in inputs])
-
+        example_data.append([time[i]]+[input["values"][i] for input in inputs])
+    
     input_data = populateDataset(mods.InputData(),example_data)
 
     evaluate_simulation.add(input_data)
@@ -87,7 +87,7 @@ def prepare_twc_thermal(logger,modelToLoad,time,temperature,massflowrate):
 
     twc_thermal_simulation = mods.SampleSRM()
     twc_thermal_algorithm = mods.Algorithm(name="algorithm1", type="SamplingAlg", modelToLoad=modelToLoad, saveSurrogate=False)
-    x_value=",".join(["{:.1f}".format(t) for t in time])
+    x_value=",".join(["{:.1f}".format(float(t)) for t in time])
     initialreaddetail=mods.InitialReadDetail(x_column="Time [s]",y_column="Wall Temperature at volume element 30 [K]",
                                              x_value=x_value,read_function="Get_DSV_y_at_x_double",
                                              lb_factor="0.9",ub_factor="1.1",lb_append="-0.0",ub_append="0.0",
@@ -143,35 +143,50 @@ def prepare_twc_thermal(logger,modelToLoad,time,temperature,massflowrate):
 
     return twc_thermal_simulation
 
-def run(logger,evaluate_simulation):
+def run(logger,simulation,export_name=None):
     # call MoDSSimpleAgent via wrapper, then get output data back
 
     logger.info("Invoking the wrapper session")
     # Construct a wrapper and run a new session
     with ms.MoDS_Session() as session:
         wrapper = cuba.wrapper(session=session)
-        wrapper.add(evaluate_simulation, rel=cuba.relationship)
+        wrapper.add(simulation, rel=cuba.relationship)
         wrapper.session.run()
+        
+        sim = search.find_cuds_objects_by_oclass(mods.Simulation, wrapper, rel=None)[0]
 
-        output_data = search.find_cuds_objects_by_oclass(mods.OutputData, wrapper, rel=None)
-
-        logger.info("Printing the simulation results.")
+        output_data = search.find_cuds_objects_by_oclass(mods.OutputData, sim, rel=None)
 
         if output_data:
-            pretty_print(output_data[-1])
+            if export_name:
+                export_cuds(sim,file="examples/"+export_name+".ttl",format="ttl")
+            return sim
+        else:
+            pretty_print(sim)
+            raise RuntimeError("No output is present.")
 
-    logger.info("################ End ################")
-
-    return output_data[-1]
-
-def outputtodict(output_data):
+def outputtodict(sim,find_time=True):
 
     # convert output data into a dictionary object
 
     output={}
+    
+    output_data = search.find_cuds_objects_by_oclass(mods.OutputData, sim, rel=None)[-1]
 
     datapoints = search.find_cuds_objects_by_oclass(mods.DataPoint, output_data, rel=mods.hasPart)
     for datapoint in datapoints:
+        if find_time:
+            # copy time from input
+            input_datapoint = datapoint.get(rel=mods.isDerivedFrom)[0]
+            input_datapointitems = search.find_cuds_objects_by_oclass(mods.DataPointItem, input_datapoint, rel=mods.hasPart)
+            for datapointitem in input_datapointitems:
+                name=datapointitem.name
+                value=datapointitem.value
+                if "Time" in datapointitem.name:
+                    if name not in output.keys():
+                        output[name]=[value]
+                    else:
+                        output[name].append(value)
         datapointitems = search.find_cuds_objects_by_oclass(mods.DataPointItem, datapoint, rel=mods.hasPart)
         for datapointitem in datapointitems:
             name=datapointitem.name
@@ -181,17 +196,18 @@ def outputtodict(output_data):
             else:
                 output[name].append(value)
 
+    if find_time:
+        # sort everything by time
+        arr_time=[float(x) for x in output["Time [s]"]]
+        index=np.argsort(arr_time)
+        for var in output:
+            output[var]=[output[var][i] for i in index]
+
     return output
 
-def createtimefrominput(input_cuds_object):
-    input_data = search.find_cuds_objects_by_oclass(mods.InputData, input_cuds_object, rel=None)
-    datapoints = search.find_cuds_objects_by_oclass(mods.DataPoint, input_data[0], rel=mods.hasPart)
-    drive_cycle=getdrivecycle(len(datapoints))
-    return drive_cycle["Time [s]"]
-
-def create_input_cuds():
+def create_input_cuds(path_input):
     try:
-        input_cuds_object=import_cuds("examples/input_cuds_object.ttl", format="ttl")
+        input_cuds_object=import_cuds("examples/drive_cycle_input.ttl", format="ttl")
     except ValueError:
         # create input CUDS object by code
 
@@ -208,29 +224,32 @@ def create_input_cuds():
                         {"name":"Total%20flow%20%5Bg%2Fh%5D"}
                         ]
         
-        drive_cycle=getdrivecycle(2) # number of points will affect runtime
+        drive_cycle=getdrivecycle(path_input,11) # number of points will affect runtime
 
         for input in engine_inputs:
             input["values"]=drive_cycle[urllib.parse.unquote(input["name"])]
-        
-        input_cuds_object=prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs)
+        input_cuds_object=prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs,drive_cycle['Time [s]'])
     return input_cuds_object
 
 def mods_wrapper(input_cuds_object):
-    
-    # create drive cycle time, assuming engine sampling points are evenly spaced in time from 0 to 1800 seconds
-    # to-do: time should be included in the input cuds object
-    drive_cycle_time=createtimefrominput(input_cuds_object)
-    
+      
     # evaluate engine surrogate, store output cuds in dictionary
 
-    engine_out=outputtodict(run(logger,input_cuds_object))
-
+    engine_out=outputtodict(run(logger,input_cuds_object,"engine-out"))
+    
     # evaluate TWC thermal simulation, store output cuds in dictionary
 
     twc_thermal_out=outputtodict(
         run(logger,prepare_twc_thermal(logger,"twc-thermal",
-                                     drive_cycle_time,engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
+                                     engine_out["Time [s]"],
+                                     engine_out["Temperature [K]"],
+                                     engine_out["Total flow [g/h]"]),
+            "twc-thermal"),
+        find_time=False
+        )
+    
+    for key in twc_thermal_out:
+        print(key)
     
     # create input for TWC surrogate
     
@@ -260,7 +279,7 @@ def mods_wrapper(input_cuds_object):
 
     # evaluate TWC surrogate
     
-    return run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs))
+    return run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs,engine_out["Time [s]"]))
 
 if __name__ == "__main__":
 
@@ -271,10 +290,10 @@ if __name__ == "__main__":
     logger.info("Loading environment variables")
     load_dotenv()
 
-    input_cuds_object=create_input_cuds()
+    input_cuds_object=create_input_cuds("examples/simple_cycle.csv")
+    
+    export_cuds(input_cuds_object,file="examples/drive_cycle_input.ttl", format="ttl")
 
     output_cuds_object=mods_wrapper(input_cuds_object)
 
-    export_cuds(input_cuds_object,file="examples/input_cuds_object", format="xml")
-
-    export_cuds(output_cuds_object,file="examples/output_cuds_object", format="xml")
+    export_cuds(output_cuds_object,file="examples/drive_cycle_output.ttl", format="ttl")
