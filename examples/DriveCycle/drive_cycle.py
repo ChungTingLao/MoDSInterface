@@ -216,11 +216,13 @@ def create_input_cuds(path_input,n):
     if not FORCE_RESTART:
         try:
             input_cuds_object=import_cuds(os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
+            logger.info("Load input from CUDS")
             return input_cuds_object
         except ValueError:
             pass
     # create input CUDS object by code
 
+    logger.info("Create input from CSV")
     engine_inputs=[{"name":"Engine%20speed%20%5BRPM%5D"},{"name":"BMEP%20%5Bbar%5D"}]
     engine_outputs=[{"name":"CO%20mass%20fraction%20%5B%2D%5D"},
                     {"name":"CO2%20mass%20fraction%20%5B%2D%5D"},
@@ -244,10 +246,14 @@ def create_input_cuds(path_input,n):
 def mods_wrapper(input_cuds_object):
       
     # evaluate engine surrogate, store output cuds in dictionary
+    
+    logger.info("Call engine surroate")
 
     engine_out=outputtodict(run(logger,input_cuds_object,"drive_cycle_engine_out"))
     
     # evaluate TWC thermal simulation, store output cuds in dictionary
+    
+    logger.info("Call TWC thermal model")
 
     twc_thermal_out=outputtodict(
         run(logger,prepare_twc_thermal(logger,"twc-thermal",
@@ -286,12 +292,15 @@ def mods_wrapper(input_cuds_object):
 
     # evaluate TWC surrogate
     
+    logger.info("Call TWC surroate")
+    
     return run(logger,prepare_evaluate(logger,"twc-model-6",twc_inputs,twc_outputs,engine_out["Time [s]"]))
 
 if __name__ == "__main__":
 
+    logging.getLogger("osp.wrappers.sim_cmcl_mods_wrapper").setLevel(logging.ERROR)
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.ERROR)
+    logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
     logger.handlers[0].setFormatter(logging.Formatter("%(levelname)s %(asctime)s [%(name)s]: %(message)s"))
     logger.info("Loading environment variables")
