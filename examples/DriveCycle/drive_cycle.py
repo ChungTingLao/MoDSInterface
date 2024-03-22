@@ -12,6 +12,9 @@ import os
 from pathlib import Path
 dir_path = Path(__file__).parent.resolve()
 
+DO_EXPORT = True
+FORCE_RESTART = True
+
 # This examples aims to run the success story by hard-coding
 # the input CUDS objects and passing them to the MoDS_Session class
 # for execution.
@@ -163,7 +166,7 @@ def run(logger,simulation,export_name=None):
 
         if output_data:
             if export_name:
-                export_cuds(sim,file=os.path.join(dir_path,export_name+".ttl"),format="ttl")
+                if DO_EXPORT: export_cuds(sim,file=os.path.join(dir_path,export_name+".ttl"),format="ttl")
             return sim
         else:
             pretty_print(sim)
@@ -209,30 +212,33 @@ def outputtodict(sim,find_time=True):
 
     return output
 
-def create_input_cuds(path_input):
-    try:
-        input_cuds_object=import_cuds(os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
-    except ValueError:
-        # create input CUDS object by code
+def create_input_cuds(path_input,n):
+    if not FORCE_RESTART:
+        try:
+            input_cuds_object=import_cuds(os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
+            return input_cuds_object
+        except ValueError:
+            pass
+    # create input CUDS object by code
 
-        engine_inputs=[{"name":"Engine%20speed%20%5BRPM%5D"},{"name":"BMEP%20%5Bbar%5D"}]
-        engine_outputs=[{"name":"CO%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"CO2%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"C3H6%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"H2%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"H2O%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"NO%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"O2%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"N2%20mass%20fraction%20%5B%2D%5D"},
-                        {"name":"Temperature%20%5BK%5D"},
-                        {"name":"Total%20flow%20%5Bg%2Fh%5D"}
-                        ]
-        
-        drive_cycle=getdrivecycle(path_input,11) # number of points will affect runtime
+    engine_inputs=[{"name":"Engine%20speed%20%5BRPM%5D"},{"name":"BMEP%20%5Bbar%5D"}]
+    engine_outputs=[{"name":"CO%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"CO2%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"C3H6%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"H2%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"H2O%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"NO%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"O2%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"N2%20mass%20fraction%20%5B%2D%5D"},
+                    {"name":"Temperature%20%5BK%5D"},
+                    {"name":"Total%20flow%20%5Bg%2Fh%5D"}
+                    ]
+    
+    drive_cycle=getdrivecycle(path_input,n) # number of points will affect runtime
 
-        for input in engine_inputs:
-            input["values"]=drive_cycle[urllib.parse.unquote(input["name"])]
-        input_cuds_object=prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs,drive_cycle['Time [s]'])
+    for input in engine_inputs:
+        input["values"]=drive_cycle[urllib.parse.unquote(input["name"])]
+    input_cuds_object=prepare_evaluate(logger,"engine-surrogate",engine_inputs,engine_outputs,drive_cycle['Time [s]'])
     return input_cuds_object
 
 def mods_wrapper(input_cuds_object):
@@ -292,10 +298,10 @@ if __name__ == "__main__":
     load_dotenv()
     #os.environ["MODS_AGENT_BASE_URL"]="http://localhost:58085"
 
-    input_cuds_object=create_input_cuds(os.path.join(dir_path,"EngineSurrogateInput.csv"))
+    input_cuds_object=create_input_cuds(os.path.join(dir_path,"EngineSurrogateInput.csv"),181)
     
-    export_cuds(input_cuds_object,file=os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
+    if DO_EXPORT: export_cuds(input_cuds_object,file=os.path.join(dir_path,"drive_cycle_input.ttl"), format="ttl")
 
     output_cuds_object=mods_wrapper(input_cuds_object)
 
-    export_cuds(output_cuds_object,file=os.path.join(dir_path,"drive_cycle_output.ttl"), format="ttl")
+    if DO_EXPORT: export_cuds(output_cuds_object,file=os.path.join(dir_path,"drive_cycle_output.ttl"), format="ttl")
