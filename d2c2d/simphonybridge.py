@@ -34,18 +34,12 @@ def upgrade(old_cuds,new_cuds):
             tmp_line=tmp_line.replace('" .','"^^xsd:float .') # add float specification
         new_content.append(tmp_line)
         
-    # remove EvaluateSurrogate reference in OutputData
+    # remove wrapper reference in EvaluateSurrogate
 
     for i in range(len(new_content)):
-        if 'mods:OutputData' in new_content[i]:
-            for j in range(i,len(new_content)):
-                line=new_content[j]
-                if 'mods:isPartOf' in line:
-                    new_content[j-1]=new_content[j-1].replace(';','.')
-                    new_content.pop(j)
-                    stop_now=True
-                    break
-            if stop_now: break
+        if 'cuba:relationship' in new_content[i]:
+            new_content.pop(i)
+            break
     
     with open(new_cuds,'w') as f:
         f.writelines(new_content)

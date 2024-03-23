@@ -16,7 +16,7 @@ def populateDataset(aDataset,data):
         aDataset.add(data_point, rel=mods.hasPart)
     return aDataset
 
-def prepare_evaluate(surrogateToLoad,inputs,outputs):
+def prepare_evaluate(surrogateToLoad,inputs,outputs,time):
     # define inputs for an "Evaluate" simulation.
 
     evaluate_simulation = mods.EvaluateSurrogate()
@@ -30,9 +30,9 @@ def prepare_evaluate(surrogateToLoad,inputs,outputs):
     evaluate_simulation.add(evaluate_algorithm)
 
     example_data=[]
-    example_data.append([input["name"] for input in inputs])
+    example_data.append(["Time [s]"]+[input["name"] for input in inputs])
     for i in range(len(inputs[0]["values"])):
-        example_data.append([input["values"][i] for input in inputs])
+        example_data.append([time[i]]+[input["values"][i] for input in inputs])
 
     input_data = populateDataset(mods.InputData(),example_data)
 
@@ -45,7 +45,7 @@ def prepare_twc_thermal(modelToLoad,time,temperature,massflowrate):
 
     twc_thermal_simulation = mods.SampleSRM()
     twc_thermal_algorithm = mods.Algorithm(name="algorithm1", type="SamplingAlg", modelToLoad=modelToLoad, saveSurrogate=False)
-    x_value=",".join(["{:.1f}".format(t) for t in time])
+    x_value=",".join(["{:.1f}".format(float(t)) for t in time])
     initialreaddetail=mods.InitialReadDetail(x_column="Time [s]",y_column="Wall Temperature at volume element 30 [K]",
                                              x_value=x_value,read_function="Get_DSV_y_at_x_double",
                                              lb_factor="0.9",ub_factor="1.1",lb_append="-0.0",ub_append="0.0",
@@ -109,19 +109,38 @@ def run(evaluate_simulation):
         wrapper = cuba.wrapper(session=session)
         wrapper.add(evaluate_simulation, rel=cuba.relationship)
         wrapper.session.run()
+        
+        sim = search.find_cuds_objects_by_oclass(mods.Simulation, wrapper, rel=None)[0]
 
-        output_data = search.find_cuds_objects_by_oclass(mods.OutputData, wrapper, rel=None)
+        output_data = search.find_cuds_objects_by_oclass(mods.OutputData, sim, rel=None)
 
-    return output_data[-1]
+        if output_data:
+            return sim
+        else:
+            raise RuntimeError("No output is present.")
 
-def outputtodict(output_data):
+def outputtodict(sim,find_time=True):
 
     # convert output data into a dictionary object
 
     output={}
+    
+    output_data = search.find_cuds_objects_by_oclass(mods.OutputData, sim, rel=None)[-1]
 
     datapoints = search.find_cuds_objects_by_oclass(mods.DataPoint, output_data, rel=mods.hasPart)
     for datapoint in datapoints:
+        if find_time:
+            # copy time from input
+            input_datapoint = datapoint.get(rel=mods.isDerivedFrom)[0]
+            input_datapointitems = search.find_cuds_objects_by_oclass(mods.DataPointItem, input_datapoint, rel=mods.hasPart)
+            for datapointitem in input_datapointitems:
+                name=datapointitem.name
+                value=datapointitem.value
+                if "Time" in datapointitem.name:
+                    if name not in output.keys():
+                        output[name]=[value]
+                    else:
+                        output[name].append(value)
         datapointitems = search.find_cuds_objects_by_oclass(mods.DataPointItem, datapoint, rel=mods.hasPart)
         for datapointitem in datapointitems:
             name=datapointitem.name
@@ -131,26 +150,30 @@ def outputtodict(output_data):
             else:
                 output[name].append(value)
 
+    if find_time:
+        # sort everything by time
+        arr_time=[float(x) for x in output["Time [s]"]]
+        index=np.argsort(arr_time)
+        for var in output:
+            output[var]=[output[var][i] for i in index]
+
     return output
 
-def createtimefrominput(input_cuds_object):
-    input_data = search.find_cuds_objects_by_oclass(mods.InputData, input_cuds_object, rel=None)
-    datapoints = search.find_cuds_objects_by_oclass(mods.DataPoint, input_data[0], rel=mods.hasPart)
-    return np.linspace(0,1800.0,len(datapoints))
-
-def mods_wrapper(input_cuds_object):
+def mods_wrapper(logger,input_cuds_object):
     
-    # create drive cycle time, assuming engine sampling points are evenly spaced in time from 0 to 1800 seconds
-    # to-do: time should be included in the input cuds object
-    drive_cycle_time=createtimefrominput(input_cuds_object)
-    
-    # evaluate engine surrogate, store output cuds in dictionary
+    logger.info("Evaluate engine surrogate")
 
     engine_out=outputtodict(run(input_cuds_object))
 
-    # evaluate TWC thermal simulation, store output cuds in dictionary
-
-    twc_thermal_out=outputtodict(run(prepare_twc_thermal("twc-thermal",drive_cycle_time,engine_out["Temperature [K]"],engine_out["Total flow [g/h]"])))
+    logger.info("Run TWC thermal simulation")
+    
+    twc_thermal_out=outputtodict(
+        run(prepare_twc_thermal("twc-thermal",
+                                engine_out["Time [s]"],
+                                engine_out["Temperature [K]"],
+                                engine_out["Total flow [g/h]"])),
+        find_time=False
+        )
     
     # create input for TWC surrogate
     
@@ -178,6 +201,6 @@ def mods_wrapper(input_cuds_object):
         if "Temperature" in input["name"]:
             input["values"]=twc_thermal_out["WallTemperature (Layer 1, Vol. element 30)"]
 
-    # evaluate TWC surrogate
+    logger.info("Evaluate TWC surrogate")
     
-    return run(prepare_evaluate("twc-model-6",twc_inputs,twc_outputs))
+    return run(prepare_evaluate("twc-model-6",twc_inputs,twc_outputs,engine_out["Time [s]"]))
