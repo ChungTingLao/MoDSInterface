@@ -1,2 +1,3 @@
 python-dotenv
+matplotlib
 git+https://github.com/EMMC-ASBL/dlite-cuds.git

@@ -1,18 +1,14 @@
 from pathlib import Path
 dir_path = Path(__file__).parent.resolve()
-print(Path(__file__))
 
 import os
 import dlitecudsbridge as dcb
 import simphonybridge as sb
-
 from osp.core.namespaces import mods
 from osp.core.utils import export_cuds
 import urllib.parse
 import csv
 import numpy as np
-
-
 
 def readcsvintodict(fn):
     # return a dictionary with headers as keys, columns as values

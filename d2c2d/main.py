@@ -6,6 +6,13 @@ from osp.core.utils import export_cuds, import_cuds
 import drivecycleinterface as dci
 import dlitecudsbridge as dcb
 import simphonybridge as sb
+import sys
+
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+
+def enablePrint():
+    sys.stdout = sys.__stdout__
 
 #load_dotenv()
 os.environ["MODS_AGENT_BASE_URL"]="http://localhost:58085"
@@ -19,23 +26,21 @@ logger.handlers[0].setFormatter(logging.Formatter("%(levelname)s %(asctime)s [%(
 
 logger.info("Force re-install ontologies for SimPhoNy 4")
 
-if True:
+import simphony_osp.tools.pico as pico
 
-    import simphony_osp.tools.pico as pico
+list_namespaces=[x.name for x in pico.namespaces()]
 
-    list_namespaces=[x.name for x in pico.namespaces()]
+if "mods" in list_namespaces: pico.uninstall("mods")
+if "cuba" in list_namespaces: pico.uninstall("cuba")
 
-    if "mods" in list_namespaces:
-        pico.uninstall("mods")
-    if "cuba" in list_namespaces:
-        pico.uninstall("cuba")
-
-    pico.install(cwd/"ontologies"/"cuba.yml")
-    pico.install(cwd/"ontologies"/"mods.yml")
+pico.install(cwd/"ontologies"/"cuba.yml")
+pico.install(cwd/"ontologies"/"mods.yml")
 
 logger.info("Convert input DLite to CUDS")
 
+blockPrint()
 dcb.d2c(input_dlite=cwd/"input_collection.json",input_cuds_external=cwd/"input_cuds_4.ttl")
+enablePrint()
 
 logger.info("SimPhoNy compatibility (4 to 3.8)")
 
@@ -52,9 +57,10 @@ logger.info("SimPhoNy compatibility (3.8 to 4)")
 sb.upgrade(cwd/"output_cuds_3.8.ttl",cwd/"output_cuds_4.ttl")
 
 logger.info("Convert output CUDS to DLite")
-
+blockPrint()
 dcb.c2d(output_cuds_internal=cwd/"output_cuds_4.ttl",output_dlite=os.path.join(cwd,"output_collection.json"),
         list_c=["Algorithm","DataPoint","DataPointItem","EvaluateSurrogate","InputData","OutputData","Variable"])
+enablePrint()
 
 for file in [cwd/"input_cuds_3.8.ttl",cwd/"input_cuds_4.ttl",cwd/"output_cuds_3.8.ttl",cwd/"output_cuds_4.ttl"]:
     if True: os.remove(file) # remove intermediate files
